@@ -14,10 +14,19 @@ public class EmployeeController {
 	@Autowired //get the bean created and inject directly in here.
 	private EmployeeRepository empRepository;
 	
-	@GetMapping("/getEmployee/{EmployeeID}")
+	@GetMapping("/getEmployeeInformation/{EmployeeID}")
 	String getEmp(@PathVariable Integer EmployeeID) {
 		return empRepository.findById(EmployeeID).toString();
 	}
+	@GetMapping("/getSalary/{EmployeeID}")
+	double getEmpSalary(@PathVariable Integer EmployeeID) {		
+	return empRepository.findById(EmployeeID).get().getSalary();
+	}
+	@GetMapping("/getLeaves/{EmployeeID}")
+	double getEmpLeaves(@PathVariable Integer EmployeeID) {		
+	return empRepository.findById(EmployeeID).get().getLeaves();
+	}
+	
 	
 	 @PostMapping(path="/addEmployee") // Map ONLY POST Requests
 	  public @ResponseBody String addNewUser (@RequestParam String name
@@ -30,6 +39,33 @@ public class EmployeeController {
 	    Integer newlyCreatedEmployeeID = emp.getId();
 	    return String.format("New Employee with employeeID-%d Created Succesfully!", newlyCreatedEmployeeID) ;
 	  }	
+	 
+	 
+	 @PostMapping(path = "/applyLeave")
+	 public @ResponseBody String applyLeaveForEmployee(@RequestParam Integer Id,@RequestParam Integer days) {
+		 Employee employeeApplyingLeave = empRepository.findById(Id).get();
+		 Integer alreadyTakenLeaves = employeeApplyingLeave.getLeaves();
+		 if(alreadyTakenLeaves + days > 23) return "Leave Disapproved!";
+		 employeeApplyingLeave.addLeaves(days);
+		 return "Leave(s) applied Successfully!";
+	 }
+	 
+	 @PostMapping(path = "/employeeResign")
+	 public @ResponseBody String leavingEmployee(@RequestParam Integer Id) {
+		 Employee employeeResigning = empRepository.findById(Id).get();
+		 empRepository.delete(employeeResigning);
+		 return "Employee Removed from DB.";
+	 }
+	 
+	 
+	 @PostMapping(path = "/setSalaryHike")
+	 public @ResponseBody String applySalaryHike(@RequestParam Integer Id,@RequestParam Integer hikePercentage) {
+		 Employee employeeGettingHike = empRepository.findById(Id).get();
+		 double employeeCurrentSalary = employeeGettingHike.getSalary();
+		 double computedHike = (double)(employeeCurrentSalary*(hikePercentage/100.0f));
+		 employeeGettingHike.setSalary(employeeCurrentSalary + computedHike);
+		 return "Salary Incremented";
+	 }
 	 
 	 @GetMapping(path="/list/employees")
 	  public @ResponseBody Iterable<Employee> getAllEmployees() {

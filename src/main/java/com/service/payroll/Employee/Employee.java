@@ -10,17 +10,21 @@ import javax.persistence.Id;
 public class Employee {
   @Id // primary key.
   @GeneratedValue(strategy=GenerationType.AUTO) //auto increment.
-  @Column(nullable=false)
+  @Column( name = "employee_id" ,nullable=false)
   private Integer id;
-  
-  @Column(name="employee_id")
-  private Integer employeeID;
   
   @Column(name="employee_name")
   private String name;
 
   @Column(name="employee_email")
   private String email;
+
+  @Column(name="employee_salary")
+  private double salary;
+  
+  @Column(name="employee_leaves")
+  private Integer leaves;
+
 
   public Integer getId() {
     return id;
@@ -42,4 +46,17 @@ public class Employee {
   public void setEmail(String email) {
     this.email = email;
   }
+  public double getSalary() {
+	    return salary;
+  }
+   public void setSalary(double salary) {
+	    this.salary = salary;
+	}
+   public Integer getLeaves() {
+	    return leaves;
+	  }
+
+	  public void addLeaves(Integer leaves) {
+	    this.leaves = leaves;
+	  }
 }
