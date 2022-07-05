@@ -1,0 +1,2 @@
+INSERT INTO employee (employee_name, employee_email,employee_salary,employee_leaves) VALUES ('Yash Bhanushali','yashbhadra1@gmail.com',20000000, 5), ('Dev Bhanushali','yashbhadra1@gmail.com',20000000, 5)
+;

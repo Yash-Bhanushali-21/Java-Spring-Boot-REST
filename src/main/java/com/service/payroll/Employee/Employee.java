@@ -9,8 +9,8 @@ import javax.persistence.Id;
 @Entity // This tells Hibernate to make a table out of this class
 public class Employee {
   @Id // primary key.
-  @GeneratedValue(strategy=GenerationType.AUTO) //auto increment.
-  @Column( name = "employee_id" ,nullable=false)
+  @GeneratedValue(strategy=GenerationType.IDENTITY) //auto increment.
+  @Column( name = "employee_id",nullable=false)
   private Integer id;
   
   @Column(name="employee_name")
