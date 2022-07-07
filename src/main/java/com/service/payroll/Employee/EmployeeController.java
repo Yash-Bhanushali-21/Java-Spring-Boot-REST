@@ -2,6 +2,7 @@ package com.service.payroll.Employee;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,7 +29,7 @@ public class EmployeeController {
 	}
 	
 	
-	 @PostMapping(path="/addEmployee") // Map ONLY POST Requests
+	 @PostMapping(path="/addEmployeeByParams")
 	  public @ResponseBody String addNewUser (@RequestParam String name
 	      , @RequestParam String email) {
 
@@ -38,6 +39,12 @@ public class EmployeeController {
 	    empRepository.save(emp);
 	    Integer newlyCreatedEmployeeID = emp.getId();
 	    return String.format("New Employee with employeeID-%d Created Succesfully!", newlyCreatedEmployeeID) ;
+	  }	
+	 @PostMapping(path="/addEmployeesByModel")
+	  public @ResponseBody String addNewUser2 (@ModelAttribute Employee emp) {
+		 System.out.println(emp.getLeaves());
+		 empRepository.save(emp);
+	    return String.format("New Employeereceived Succesfully !");
 	  }	
 	 
 	 

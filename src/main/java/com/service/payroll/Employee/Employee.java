@@ -56,7 +56,7 @@ public class Employee {
 	    return leaves;
 	  }
 
-	  public void addLeaves(Integer leaves) {
+	  public void setLeaves(Integer leaves) {
 	    this.leaves = leaves;
 	  }
 }
