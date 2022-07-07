@@ -5,10 +5,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.service.payroll.Employee.Employee;
+@RequestMapping("/api")
 @RestController
 public class EmployeeController {
 
@@ -16,8 +18,9 @@ public class EmployeeController {
 	private EmployeeRepository empRepository;
 	
 	@GetMapping("/getEmployeeInformation/{EmployeeID}")
-	String getEmp(@PathVariable Integer EmployeeID) {
-		return empRepository.findById(EmployeeID).toString();
+	Employee getEmp(@PathVariable Integer EmployeeID) {
+		//sending the found entry in a json form.
+		return empRepository.findById(EmployeeID).get();
 	}
 	@GetMapping("/getSalary/{EmployeeID}")
 	double getEmpSalary(@PathVariable Integer EmployeeID) {		
@@ -42,7 +45,6 @@ public class EmployeeController {
 	  }	
 	 @PostMapping(path="/addEmployeesByModel")
 	  public @ResponseBody String addNewUser2 (@ModelAttribute Employee emp) {
-		 System.out.println(emp.getLeaves());
 		 empRepository.save(emp);
 	    return String.format("New Employeereceived Succesfully !");
 	  }	
@@ -53,7 +55,7 @@ public class EmployeeController {
 		 Employee employeeApplyingLeave = empRepository.findById(Id).get();
 		 Integer alreadyTakenLeaves = employeeApplyingLeave.getLeaves();
 		 if(alreadyTakenLeaves + days > 23) return "Leave Disapproved!";
-		 employeeApplyingLeave.addLeaves(days);
+		 employeeApplyingLeave.setLeaves(days);
 		 return "Leave(s) applied Successfully!";
 	 }
 	 
