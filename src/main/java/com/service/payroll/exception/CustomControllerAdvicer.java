@@ -1,4 +1,4 @@
-package com.service.payroll.GlobalException;
+package com.service.payroll.exception;
 
 import java.util.NoSuchElementException;
 
@@ -22,9 +22,18 @@ public class CustomControllerAdvicer extends ResponseEntityExceptionHandler{
 	    @ResponseBody
 	    @ExceptionHandler(NoSuchElementException.class)
 	    public ResponseEntity<?> handleControllerException(HttpServletRequest request, NoSuchElementException ex) {
-	        CustomExcepetionBody customExp = new CustomExcepetionBody(HttpStatus.NOT_FOUND.value(), "Did not find employee with id ");
+	        CustomExcepetionBody customExp = new CustomExcepetionBody(HttpStatus.NOT_FOUND.value(), "Not Found!");
 	        return new ResponseEntity<CustomExcepetionBody>(customExp,HttpStatus.NOT_FOUND);
 	    }
+	    
+	    @ResponseBody
+	    @ExceptionHandler(InvalidHikePercentageException.class)
+	    public ResponseEntity<?> handleEmployeeNotFoundException(HttpServletRequest request, InvalidHikePercentageException ex) {
+	        CustomExcepetionBody customExp = new CustomExcepetionBody(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+	        return new ResponseEntity<CustomExcepetionBody>(customExp,HttpStatus.BAD_REQUEST);
+	    }
+	   
+	   
 
 	  
 

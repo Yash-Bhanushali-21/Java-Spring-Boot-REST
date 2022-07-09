@@ -1,4 +1,4 @@
-package com.service.payroll.GlobalException;
+package com.service.payroll.exception;
 
 public class CustomExcepetionBody {
 

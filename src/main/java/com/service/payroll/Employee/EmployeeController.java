@@ -8,11 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.service.payroll.Employee.Employee;
+import com.service.payroll.exception.InvalidHikePercentageException;
 @RequestMapping("/api")
 @RestController
 public class EmployeeController {
@@ -73,12 +75,22 @@ public class EmployeeController {
 	 }
 	 
 	 
-	 @PostMapping(path = "/setSalaryHike")
-	 public @ResponseBody String applySalaryHike(@RequestParam Integer Id,@RequestParam Integer hikePercentage) {
+	 @PutMapping(path = "/setSalaryHike")
+	 public @ResponseBody String applySalaryHike(@RequestParam Integer Id,@RequestParam Integer hikePercentage) throws InvalidHikePercentageException {
 		 Employee employeeGettingHike = empRepository.findById(Id).get();
-		 double employeeCurrentSalary = employeeGettingHike.getSalary();
-		 double computedHike = (double)(employeeCurrentSalary*(hikePercentage/100.0f));
-		 employeeGettingHike.setSalary(employeeCurrentSalary + computedHike);
+
+		 if(hikePercentage<10 || hikePercentage > 50) throw new InvalidHikePercentageException("Hike Should be between 10 to 50%!");
+		 
+		 try {
+			 double employeeCurrentSalary = employeeGettingHike.getSalary();
+			 double computedHike = (double)(employeeCurrentSalary*(hikePercentage/100.0f));
+			 employeeGettingHike.setSalary(employeeCurrentSalary + computedHike);
+			 
+		 }
+		 catch (Exception e) {
+			 System.out.println("Something went wrong" + e.getMessage()); 
+		 }
+		 
 		 return "Salary Incremented";
 	 }
 	 
@@ -88,5 +100,7 @@ public class EmployeeController {
 	    return empRepository.findAll();
 	  }
 	
+	
+
 
 }
