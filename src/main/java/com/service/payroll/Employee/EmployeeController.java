@@ -1,6 +1,9 @@
 package com.service.payroll.Employee;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,10 +21,13 @@ public class EmployeeController {
 	private EmployeeRepository empRepository;
 	
 	@GetMapping("/getEmployeeInformation/{EmployeeID}")
-	Employee getEmp(@PathVariable Integer EmployeeID) {
+	public @ResponseBody Employee getEmp(@PathVariable Integer EmployeeID)  {
 		//sending the found entry in a json form.
-		return empRepository.findById(EmployeeID).get();
-	}
+		Employee emp = empRepository.findById(EmployeeID).get();
+		System.out.println(emp);
+
+		return emp;
+ 	}
 	@GetMapping("/getSalary/{EmployeeID}")
 	double getEmpSalary(@PathVariable Integer EmployeeID) {		
 	return empRepository.findById(EmployeeID).get().getSalary();
