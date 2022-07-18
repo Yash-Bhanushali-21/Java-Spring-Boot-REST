@@ -2,7 +2,7 @@ package com.service.payroll.exception;
 
 import java.util.NoSuchElementException;
 
-public class InvalidHikePercentageException extends NoSuchElementException {
+public class InvalidHikePercentageException extends Exception {
 	/**
 	 * 
 	 */

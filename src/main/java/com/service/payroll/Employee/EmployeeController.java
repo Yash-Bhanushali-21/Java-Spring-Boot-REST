@@ -4,6 +4,7 @@ import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.common.base.Optional;
 import com.service.payroll.Employee.Employee;
 import com.service.payroll.exception.InvalidHikePercentageException;
+import com.service.payroll.exception.InvalidLeavesException;
 @RequestMapping("/api")
 @RestController
 public class EmployeeController {
@@ -40,6 +44,7 @@ public class EmployeeController {
 	}
 	
 	
+	
 	 @PostMapping(path="/addEmployeeByParams")
 	  public @ResponseBody String addNewUser (@RequestParam String name
 	      , @RequestParam String email) {
@@ -59,10 +64,10 @@ public class EmployeeController {
 	 
 	 
 	 @PostMapping(path = "/applyLeave")
-	 public @ResponseBody String applyLeaveForEmployee(@RequestParam Integer Id,@RequestParam Integer days) {
+	 public @ResponseBody String applyLeaveForEmployee(@RequestParam Integer Id,@RequestParam Integer days) throws InvalidLeavesException {
 		 Employee employeeApplyingLeave = empRepository.findById(Id).get();
 		 Integer alreadyTakenLeaves = employeeApplyingLeave.getLeaves();
-		 if(alreadyTakenLeaves + days > 23) return "Leave Disapproved!";
+		 if(alreadyTakenLeaves + days > 23) throw new InvalidLeavesException("too many leave(s) already taken!");
 		 employeeApplyingLeave.setLeaves(days);
 		 return "Leave(s) applied Successfully!";
 	 }

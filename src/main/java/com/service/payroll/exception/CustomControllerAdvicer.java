@@ -32,7 +32,8 @@ public class CustomControllerAdvicer extends ResponseEntityExceptionHandler{
 	        CustomExcepetionBody customExp = new CustomExcepetionBody(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
 	        return new ResponseEntity<CustomExcepetionBody>(customExp,HttpStatus.BAD_REQUEST);
 	    }
-	   
+	    
+	    
 	   
 
 	  
